@@ -1,7 +1,9 @@
 com/angular/spring/test/service/AppService.class
 com/angular/spring/test/SpringAngularTestApplication.class
 com/angular/spring/test/service/ServiceImpl/AppServiceImpl$1.class
+com/angular/spring/test/model/Hero.class
 com/angular/spring/test/model/RiskLevel.class
 com/angular/spring/test/model/MicroService.class
 com/angular/spring/test/service/ServiceImpl/AppServiceImpl.class
+com/angular/spring/test/service/ServiceImpl/AppServiceImpl$2.class
 com/angular/spring/test/controller/AppController.class

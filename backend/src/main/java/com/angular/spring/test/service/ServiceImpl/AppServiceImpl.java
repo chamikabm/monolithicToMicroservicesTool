@@ -1,5 +1,6 @@
 package com.angular.spring.test.service.ServiceImpl;
 
+import com.angular.spring.test.model.Hero;
 import com.angular.spring.test.model.MicroService;
 import com.angular.spring.test.model.RiskLevel;
 import com.angular.spring.test.service.AppService;
@@ -28,6 +29,52 @@ public class AppServiceImpl implements AppService {
         return new ArrayList<MicroService>() {{
             add(ms1);
             add(ms2);
+        }};
+    }
+
+    @Override
+    public List<Hero> getAllHeroes() {
+        Hero hero1 = new Hero();
+        hero1.setId(1);
+        hero1.setName("Chamika");
+
+        Hero hero2 = new Hero();
+        hero2.setId(1);
+        hero2.setName("Chamika");
+
+        Hero hero3 = new Hero();
+        hero3.setId(1);
+        hero3.setName("Chamika");
+
+        Hero hero4 = new Hero();
+        hero4.setId(1);
+        hero4.setName("Chamika");
+
+        Hero hero5 = new Hero();
+        hero5.setId(1);
+        hero5.setName("Chamika");
+
+        Hero hero6 = new Hero();
+        hero6.setId(1);
+        hero6.setName("Chamika");
+
+        Hero hero7 = new Hero();
+        hero7.setId(1);
+        hero7.setName("Chamika");
+
+        Hero hero8 = new Hero();
+        hero8.setId(1);
+        hero8.setName("Chamika");
+
+        return new ArrayList<Hero>() {{
+            add(hero1);
+            add(hero2);
+            add(hero3);
+            add(hero4);
+            add(hero5);
+            add(hero6);
+            add(hero7);
+            add(hero8);
         }};
     }
 }
