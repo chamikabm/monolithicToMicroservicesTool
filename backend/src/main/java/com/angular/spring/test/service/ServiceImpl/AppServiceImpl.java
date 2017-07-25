@@ -4,10 +4,18 @@ import com.angular.spring.test.model.Hero;
 import com.angular.spring.test.model.MicroService;
 import com.angular.spring.test.model.RiskLevel;
 import com.angular.spring.test.service.AppService;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AppServiceImpl implements AppService {
@@ -76,5 +84,41 @@ public class AppServiceImpl implements AppService {
             add(hero7);
             add(hero8);
         }};
+    }
+
+    @Override
+    public void saveProjectFiles(MultipartFile file) {
+        String destination = "../../../../../aa";
+
+        /**
+         * save file to temp
+         */
+        File zip = null;
+        try {
+            zip = File.createTempFile(UUID.randomUUID().toString(), "temp");
+            FileOutputStream o = new FileOutputStream(zip);
+            IOUtils.copy(file.getInputStream(), o);
+            o.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+        /**
+         * unizp file from temp by zip4j
+         */
+
+        try {
+            ZipFile zipFile = new ZipFile(zip);
+            zipFile.extractAll(destination);
+        } catch (ZipException e) {
+            e.printStackTrace();
+        } finally {
+            /**
+             * delete temp file
+             */
+            zip.delete();
+        }
     }
 }

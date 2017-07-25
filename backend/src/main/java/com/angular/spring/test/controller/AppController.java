@@ -4,15 +4,21 @@ package com.angular.spring.test.controller;
 import com.angular.spring.test.model.Hero;
 import com.angular.spring.test.model.MicroService;
 import com.angular.spring.test.service.AppService;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.IOUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
+
 
 @RestController
 public class AppController {
@@ -47,39 +53,13 @@ public class AppController {
 
     @RequestMapping(method = RequestMethod.POST, value="/uploader")
     @ResponseBody
-    public String fileUploader(@RequestParam("file") MultipartFile uploader) throws IOException {
-
-        InputStream uploadedInputStream = uploader.getInputStream();
+    public ResponseEntity fileUploader(@RequestParam("file") MultipartFile file) {
 
 
-        // save it
-        writeToFile(uploadedInputStream, "../../../../temp");
 
-
-        return "file";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // save uploaded file to new location
-    private void writeToFile(InputStream uploadedInputStream,
-                             String uploadedFileLocation) {
 
-        try {
-            OutputStream out = new FileOutputStream(new File(
-                    uploadedFileLocation));
-            int read = 0;
-            byte[] bytes = new byte[1024];
-
-            out = new FileOutputStream(new File(uploadedFileLocation));
-            while ((read = uploadedInputStream.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
-            }
-            out.flush();
-            out.close();
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
-
-    }
 
 }
