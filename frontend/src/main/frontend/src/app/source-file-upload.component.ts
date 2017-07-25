@@ -8,5 +8,25 @@ import { FileUploader } from 'ng2-file-upload';
 })
 
 export class SourceFileUploaderComponent {
-  public uploader:FileUploader = new FileUploader({url:'/api/uploader'});
+
+  public uploader: FileUploader;
+  public isUploadCompleted:boolean = false;
+
+  constructor() {
+    this.uploader = new FileUploader({
+      url:'/api/uploader',
+      isHTML5: true
+    });
+
+    this.uploader.onCompleteItem = (item, response, status, header) => {
+      if (status === 200) {
+        //Your code goes here
+        alert("ok");
+        this.isUploadCompleted =  true;
+      }
+    };
+
+
+  }
+
 }

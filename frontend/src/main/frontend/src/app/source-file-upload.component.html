@@ -36,8 +36,8 @@
         <tbody>
         <tr *ngFor="let item of uploader.queue">
           <td><strong>{{ item.file.name }}</strong></td>
-          <td nowrap>{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
-          <td>
+          <td *ngIf="!uploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+          <td *ngIf="!uploader.isHTML5">
             <div class="progress" style="margin-bottom: 0;">
               <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
             </div>
@@ -72,6 +72,20 @@
             <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
           </div>
         </div>
+      </div>
+
+      <div *ngIf="isUploadCompleted">
+        <div class="card">
+          <div class="card-block text-nowrap">
+            <div class="alert alert-success" role="alert">
+              <strong>Success!</strong> File has been uploaded successfully to the server.
+            </div>
+          </div>
+        </div>
+
+        <form class="clearfix">
+          <button type="submit" class="btn btn-primary">Process</button>
+        </form>
       </div>
     </div>
   </div>
