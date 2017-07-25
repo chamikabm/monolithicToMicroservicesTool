@@ -14,17 +14,13 @@
     <div class="col-md-4">
       <form>
         <div class="form-group">
-          <label for="multiple">Multiple</label>
-          <input type="file" class="form-control" name="multiple" ng2FileSelect [uploader]="uploader" multiple  />
-        </div>
-        <div class="form-group">
-          <label for="single">single</label>
+          <label for="single">Upload Project as a Zip file</label>
           <input type="file" class="form-control" name="single" ng2FileSelect [uploader]="uploader" />
         </div>
       </form>
     </div>
     <div class="col-md-8">
-      <h3>File Upload with Angular 2 and Node</h3>
+      <h3>File upload</h3>
       Queue length: {{ uploader?.queue?.length }}
 
       <table class="table">
@@ -76,18 +72,6 @@
             <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
           </div>
         </div>
-        <button type="button" class="btn btn-success btn-s"
-                (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-          <span class="glyphicon glyphicon-upload"></span> Upload all
-        </button>
-        <button type="button" class="btn btn-warning btn-s"
-                (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
-          <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
-        </button>
-        <button type="button" class="btn btn-danger btn-s"
-                (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
-          <span class="glyphicon glyphicon-trash"></span> Remove all
-        </button>
       </div>
     </div>
   </div>
