@@ -28,9 +28,11 @@ public class AppServiceImpl implements AppService {
     @Override
     public List<MicroService> getAllServices() {
         MicroService ms1 = new MicroService();
+        ms1.setId(1);
         ms1.setServiceName("MS1");
         ms1.setRiskLevel(RiskLevel.HIGH_RISK);
         MicroService ms2 = new MicroService();
+        ms2.setId(1);
         ms2.setServiceName("MS2");
         ms2.setRiskLevel(RiskLevel.LOW_RISK);
 

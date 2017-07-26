@@ -64,7 +64,7 @@
                 <span class="glyphicon glyphicon-ban-circle"></span> Cancel
               </button>
               <button type="button" class="btn btn-danger btn-xs"
-                      (click)="onCancel()">
+                      (click)="onRemove()">
                 <span class="glyphicon glyphicon-trash"></span> Remove
               </button>
             </td>
@@ -91,7 +91,6 @@
           </div>
 
           <form class="clearfix"  (submit)="onSubmit()">
-            <input [(ngModel)]="element.name"/>
             <button type="submit" class="btn btn-primary">Process</button>
           </form>
         </div>

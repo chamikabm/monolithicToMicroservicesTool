@@ -1,23 +1,24 @@
 import { Component } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
-import { Router } from '@angular/router';
 
-import { HeroService } from './hero.service';
+import { Http } from '@angular/http';
+
+import { MicroService } from './micro-service';
 
 @Component({
   selector: 'source-file-uploader',
   templateUrl: './source-file-upload.component.html',
-  styleUrls: ['./source-file-upload.component.css'],
-  providers: [HeroService]
+  styleUrls: ['./source-file-upload.component.css']
 })
 
 export class SourceFileUploaderComponent {
 
   public uploader: FileUploader;
   public isUploadCompleted:boolean = false;
+  public isProcessCompleted:boolean = false;
+  public microservices: MicroService[];
 
-  constructor(private router: Router,
-              private heroService: HeroService) {
+  constructor(public http: Http) {
 
     this.uploader = new FileUploader({
       url:'/api/uploader',
@@ -26,22 +27,27 @@ export class SourceFileUploaderComponent {
 
     this.uploader.onCompleteItem = (item, response, status, header) => {
       if (status === 200) {
-        //Your code goes here
-        alert("ok");
         this.isUploadCompleted =  true;
       }
     };
   }
 
   onSubmit():void {
-    this.heroService.process()
-      .then( response => console.log("Success"),
-       error => console.log("Error"));
+    this.http.get('/api/process', {}).subscribe(
+      (res:any) => {
+        this.microservices = res.json() as MicroService[];
+        this.isProcessCompleted = true;
+      }
+    )
   };
 
   onCancel(): void {
-    this.router.navigate(['/detail']);
+    this.isUploadCompleted =  false;
+    this.uploader.clearQueue();
   }
 
-
+  onRemove(): void {
+    this.isUploadCompleted =  false;
+    this.uploader.clearQueue();
+  }
 }
