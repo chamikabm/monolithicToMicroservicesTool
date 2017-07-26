@@ -54,12 +54,16 @@ public class AppController {
     @RequestMapping(method = RequestMethod.POST, value="/uploader")
     @ResponseBody
     public ResponseEntity fileUploader(@RequestParam("file") MultipartFile file) {
-
-
-
+        appService.saveProjectFiles(file);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(method = RequestMethod.POST, value="/process")
+    @ResponseBody
+    public ResponseEntity process() {
+        appService.process();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
 }

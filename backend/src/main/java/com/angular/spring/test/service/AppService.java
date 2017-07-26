@@ -14,4 +14,6 @@ public interface AppService {
     List<Hero> getAllHeroes();
 
     void saveProjectFiles(MultipartFile file);
+
+    void process();
 }

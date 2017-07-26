@@ -60,11 +60,11 @@
                 <span class="glyphicon glyphicon-upload"></span> Upload
               </button>
               <button type="button" class="btn btn-warning btn-xs"
-                      (click)="item.cancel()" [disabled]="!item.isUploading">
+                      (click)="onCancel()" [disabled]="!item.isUploading">
                 <span class="glyphicon glyphicon-ban-circle"></span> Cancel
               </button>
               <button type="button" class="btn btn-danger btn-xs"
-                      (click)="item.remove()">
+                      (click)="onCancel()">
                 <span class="glyphicon glyphicon-trash"></span> Remove
               </button>
             </td>
@@ -90,7 +90,8 @@
             </div>
           </div>
 
-          <form class="clearfix">
+          <form class="clearfix"  (submit)="onSubmit()">
+            <input [(ngModel)]="element.name"/>
             <button type="submit" class="btn btn-primary">Process</button>
           </form>
         </div>

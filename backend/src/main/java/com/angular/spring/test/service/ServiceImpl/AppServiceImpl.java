@@ -88,7 +88,7 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public void saveProjectFiles(MultipartFile file) {
-        String destination = "../../../../../aa";
+        String destination = "/home/chamika/Projects/monolithicToMicroservicesTool/aa";
 
         /**
          * save file to temp
@@ -120,5 +120,19 @@ public class AppServiceImpl implements AppService {
              */
             zip.delete();
         }
+    }
+
+    @Override
+    public void process() {
+        //Test code to delay the response.
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        // Do Nothing
+                    }
+                },
+                10000
+        );
     }
 }
