@@ -31,14 +31,27 @@ public class AppServiceImpl implements AppService {
         ms1.setId(1);
         ms1.setServiceName("MS1");
         ms1.setRiskLevel(RiskLevel.HIGH_RISK);
+
         MicroService ms2 = new MicroService();
-        ms2.setId(1);
+        ms2.setId(2);
         ms2.setServiceName("MS2");
         ms2.setRiskLevel(RiskLevel.LOW_RISK);
+
+        MicroService ms3 = new MicroService();
+        ms3.setId(3);
+        ms3.setServiceName("MS3");
+        ms3.setRiskLevel(RiskLevel.MEDIUM_RISK);
+
+        MicroService ms4 = new MicroService();
+        ms4.setId(4);
+        ms4.setServiceName("MS4");
+        ms4.setRiskLevel(RiskLevel.NO_RISK);
 
         return new ArrayList<MicroService>() {{
             add(ms1);
             add(ms2);
+            add(ms3);
+            add(ms4);
         }};
     }
 

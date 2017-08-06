@@ -37,6 +37,12 @@ export class SourceFileUploaderComponent {
       (res:any) => {
         this.microservices = res.json() as MicroService[];
         this.isProcessCompleted = true;
+      },
+      (error) => {
+        console.log("Error Occurred "+ error);
+      },
+      () => {
+        console.log("Event Completed.");
       }
     )
   };
@@ -49,5 +55,31 @@ export class SourceFileUploaderComponent {
   onRemove(): void {
     this.isUploadCompleted =  false;
     this.uploader.clearQueue();
+  }
+
+  getMicroServiceListStyleClass(riskLevel:string):string {
+    switch (riskLevel) {
+      case "LOW_RISK":
+        return "accordion-toggle list-group-item-success";
+      case "MEDIUM_RISK":
+        return "accordion-toggle list-group-item-info";
+      case "HIGH_RISK":
+        return "accordion-toggle list-group-item-danger";
+      default:
+        return "accordion-toggle list-group-item-action";
+    }
+  }
+
+  getMicroServiceBadgeStyleClass(riskLevel:string):string {
+    switch (riskLevel) {
+      case "LOW_RISK":
+        return "badge badge-success";
+      case "MEDIUM_RISK":
+        return "badge badge-info";
+      case "HIGH_RISK":
+        return "badge badge-danger";
+      default:
+        return "badge badge-default";
+    }
   }
 }
