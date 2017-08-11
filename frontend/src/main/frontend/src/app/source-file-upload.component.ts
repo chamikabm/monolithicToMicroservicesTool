@@ -82,4 +82,17 @@ export class SourceFileUploaderComponent {
         return "badge badge-default";
     }
   }
+
+  getImportancePercentage(riskLevel:string):number {
+    switch (riskLevel) {
+      case "LOW_RISK":
+        return 75;
+      case "MEDIUM_RISK":
+        return 63;
+      case "HIGH_RISK":
+        return 72;
+      default:
+        return 80;
+    }
+  }
 }

@@ -111,9 +111,9 @@
           <tr *ngFor="let service of microservices" data-toggle="collapse" data-target="#demo1" [ngClass]="getMicroServiceListStyleClass(service.riskLevel)">
             <td>{{service.id}}</td>
             <td>{{service.serviceName}}</td>
-            <td>Desc 1</td>
+            <td>Description for {{service.serviceName}}</td>
             <td><span [ngClass]="getMicroServiceBadgeStyleClass(service.riskLevel)">{{service.riskLevel}}</span></td>
-            <td>10%</td>
+            <td>{{getImportancePercentage(service.riskLevel)}}%</td>
           </tr>
           <tr >
             <td colspan="6" class="hiddenRow"><div class="accordian-body collapse" id="demo1"> Demo1 </div> </td>
