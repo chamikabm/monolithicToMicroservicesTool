@@ -103,7 +103,7 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public void saveProjectFiles(MultipartFile file) {
-        String destination = "/home/chamika/Projects/monolithicToMicroservicesTool/aa";
+        String destination = "/home/chamika/Projects/monolithicToMicroservicesTool/uploadedProjectFiles";
 
         /**
          * save file to temp

@@ -29,20 +29,6 @@ public class AppController {
         return new ResponseEntity<>(welcomeMessage, HttpStatus.OK);
     }
 
-    @RequestMapping("/services")
-    public ResponseEntity services() {
-        List<MicroService> microService = appService.getAllServices();
-
-        return new ResponseEntity<>(microService, HttpStatus.OK);
-    }
-
-    @RequestMapping("/heroes")
-    public ResponseEntity heroes() {
-        List<Hero> heroes = appService.getAllHeroes();
-
-        return new ResponseEntity<>(heroes, HttpStatus.OK);
-    }
-
     @RequestMapping(method = RequestMethod.POST, value="/uploader")
     @ResponseBody
     public ResponseEntity fileUploader(@RequestParam("file") MultipartFile file) {

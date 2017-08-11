@@ -1,10 +1,13 @@
 package com.angular.spring.test.model;
 
+import java.util.List;
+
 public class MicroService {
 
     private int id;
     private String serviceName;
     private RiskLevel riskLevel;
+    private List<Class> classes;
 
     public int getId() {
         return id;
@@ -28,5 +31,14 @@ public class MicroService {
 
     public void setRiskLevel(RiskLevel riskLevel) {
         this.riskLevel = riskLevel;
+    }
+
+
+    public List<Class> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List<Class> classes) {
+        this.classes = classes;
     }
 }
