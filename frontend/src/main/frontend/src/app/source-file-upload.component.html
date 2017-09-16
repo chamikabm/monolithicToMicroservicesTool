@@ -97,6 +97,16 @@
           </div>
         </div>
 
+        <div *ngIf="errormessage">
+          <div class="card">
+            <div class="card-block text-nowrap">
+              <div class="alert alert-danger" role="alert">
+                <strong>Failed!</strong> Processing has failed due to {{errormessage}}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <table *ngIf="microservices" class="table table-condensed" style="border-collapse:collapse;">
           <thead>
           <tr>

@@ -1,10 +1,11 @@
-package com.angular.spring.test.Manager;
+package com.angular.spring.test.manager;
 
 import com.angular.spring.test.Algorithm.Clustering.Cluster;
 import com.angular.spring.test.Algorithm.Clustering.ClusteringAlgorithm;
 import com.angular.spring.test.Algorithm.Clustering.DefaultClusteringAlgorithm;
 import com.angular.spring.test.model.MicroService;
 
+import java.io.File;
 import java.util.List;
 
 public class ClusterManager {
@@ -15,7 +16,8 @@ public class ClusterManager {
     private final int gamma = 4;
     private final int delta = 5;
 
-    public List<MicroService> getMicroServiceCluster(List<Class> sourceClassesList) {
+    public List<MicroService> getMicroServiceCluster(File sourceFiles) {
+        List<Class> sourceClassesList = null;
         ClusteringAlgorithm clusteringAlgorithm = new DefaultClusteringAlgorithm();
         Cluster cluster =
                 clusteringAlgorithm.performClustering(sourceClassesList, alpha, beta, gamma, delta);

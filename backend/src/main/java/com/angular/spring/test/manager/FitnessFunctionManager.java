@@ -1,4 +1,4 @@
-package com.angular.spring.test.Manager;
+package com.angular.spring.test.manager;
 
 import com.angular.spring.test.model.MicroService;
 

@@ -40,10 +40,14 @@ public class AppController {
     @ResponseBody
     public ResponseEntity process() {
 
-        appService.process();
-        List<MicroService> microServices = appService.getAllServices();
+        try {
+            List<MicroService> microServices = appService.process();
 
-        return new ResponseEntity<>(microServices, HttpStatus.OK);
+            return new ResponseEntity<>(microServices, HttpStatus.OK);
+        } catch (RuntimeException e){
+
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

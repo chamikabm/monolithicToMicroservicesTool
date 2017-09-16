@@ -15,5 +15,5 @@ public interface AppService {
 
     void saveProjectFiles(MultipartFile file);
 
-    void process();
+    List<MicroService> process();
 }

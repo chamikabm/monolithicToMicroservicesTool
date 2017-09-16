@@ -1,7 +1,9 @@
 package com.angular.spring.test.service.ServiceImpl;
 
+import com.angular.spring.test.manager.ProcessManager;
 import com.angular.spring.test.model.Hero;
 import com.angular.spring.test.model.MicroService;
+import com.angular.spring.test.model.ProjectValidateModel;
 import com.angular.spring.test.model.RiskLevel;
 import com.angular.spring.test.service.AppService;
 import net.lingala.zip4j.core.ZipFile;
@@ -14,6 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -138,16 +141,24 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public void process() {
-        //Test code to delay the response.
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        // Do Nothing
-                    }
-                },
-                10000
-        );
+    public List<MicroService> process() throws RuntimeException {
+        System.out.println("Analyzing started..." + new Date());
+
+
+            ProcessManager processManager = new ProcessManager();
+            ProjectValidateModel projectValidateModel = processManager.validateProjectStructure();
+            System.out.println("Is Valid : " + projectValidateModel.isValid());
+            if (projectValidateModel.isValid()) {
+                List<MicroService> microServices = processManager.getAllMicroServices(projectValidateModel.getProjectFile());
+
+                if (microServices == null) {
+                    throw new RuntimeException("Zero Micro Services Found!");
+                } else {
+                    return microServices;
+                }
+
+            } else {
+                throw new RuntimeException(projectValidateModel.getMessage());
+            }
     }
 }

@@ -44,7 +44,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm{
 
     @Override
     public Cluster performClustering(List<Class> sourceClassesList, int alpha, int beta, int gamma, int delta) {
-        return null;
+        return new Cluster("micro services cluster");
     }
 
     private void checkArguments(double[][] distances, String[] clusterNames,

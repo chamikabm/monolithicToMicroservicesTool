@@ -17,6 +17,7 @@ export class SourceFileUploaderComponent {
   public isUploadCompleted:boolean = false;
   public isProcessCompleted:boolean = false;
   public microservices: MicroService[];
+  public errormessage: string;
 
   constructor(public http: Http) {
 
@@ -40,6 +41,11 @@ export class SourceFileUploaderComponent {
       },
       (error) => {
         console.log("Error Occurred "+ error);
+        if (error.status == 500) {
+          this.errormessage = error._body;
+          this.isProcessCompleted = true;
+        }
+
       },
       () => {
         console.log("Event Completed.");
