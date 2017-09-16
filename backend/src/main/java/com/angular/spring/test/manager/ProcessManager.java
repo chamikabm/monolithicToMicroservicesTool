@@ -100,5 +100,9 @@ public class ProcessManager {
             return clusterManager.getMicroServiceCluster(projectFiles);
         }
     }
+
+    public boolean isContainServiceFolder(String[] filesList) {
+        return Arrays.asList(filesList).contains("Service");
+    }
 }
 

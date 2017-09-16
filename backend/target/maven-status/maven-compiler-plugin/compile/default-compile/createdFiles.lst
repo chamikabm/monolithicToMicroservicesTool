@@ -4,7 +4,6 @@ com/angular/spring/test/Algorithm/Clustering/Cluster.class
 com/angular/spring/test/Algorithm/Clustering/DistanceMap.class
 com/angular/spring/test/model/MicroService.class
 com/angular/spring/test/manager/ClusterManager.class
-com/angular/spring/test/Algorithm/Clustering/Cluster$1.class
 com/angular/spring/test/Algorithm/Clustering/HierarchyBuilder.class
 com/angular/spring/test/controller/AppController.class
 com/angular/spring/test/service/AppService.class

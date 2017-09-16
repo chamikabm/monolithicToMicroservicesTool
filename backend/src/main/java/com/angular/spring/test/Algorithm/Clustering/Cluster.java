@@ -4,6 +4,7 @@ import com.angular.spring.test.model.MicroService;
 import com.angular.spring.test.model.RiskLevel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Cluster {
@@ -193,33 +194,41 @@ public class Cluster {
 
     }
 
-    public List<MicroService> getMicroServices() {
-        MicroService ms1 = new MicroService();
-        ms1.setId(1);
-        ms1.setServiceName("Student Service");
-        ms1.setRiskLevel(RiskLevel.HIGH_RISK);
+    public List<MicroService> getMicroServices(String[] serviceFiles) {
 
-        MicroService ms2 = new MicroService();
-        ms2.setId(2);
-        ms2.setServiceName("Department Service");
-        ms2.setRiskLevel(RiskLevel.LOW_RISK);
+        if (serviceFiles == null || serviceFiles.length == 0) {
+            System.out.println("No services found in the list");
+            return null;
+        } else {
+            List<String> list = new ArrayList<String>(Arrays.asList(serviceFiles));
+            list.remove("Impl");
+            list.replaceAll(x -> x.replace(".java", ""));
+            list.replaceAll(x -> x.replace("Service", " Service"));
+            serviceFiles = list.toArray(new String[0]);
 
-        MicroService ms3 = new MicroService();
-        ms3.setId(3);
-        ms3.setServiceName("Registration Service");
-        ms3.setRiskLevel(RiskLevel.MEDIUM_RISK);
+            List<MicroService> microServices = new ArrayList<>();
+            for (int i = 0; i < serviceFiles.length; i++) {
+                String serviceName = serviceFiles[i];
+                microServices.add(new MicroService(i + 1, serviceName, getRiskLevel(serviceName)));
+            }
 
-        MicroService ms4 = new MicroService();
-        ms4.setId(4);
-        ms4.setServiceName("Authentication Service");
-        ms4.setRiskLevel(RiskLevel.NO_RISK);
+            return microServices;
+        }
+    }
 
-        return new ArrayList<MicroService>() {{
-            add(ms1);
-            add(ms2);
-            add(ms3);
-            add(ms4);
-        }};
+    private RiskLevel getRiskLevel(String service) {
+        switch (service)  {
+            case "Department Service" :
+                return RiskLevel.MEDIUM_RISK;
+            case "Registration Service" :
+                return RiskLevel.LOW_RISK;
+            case "Authentication Service" :
+                return RiskLevel.LOW_RISK;
+            case "Student Service" :
+                return RiskLevel.HIGH_RISK;
+            default:
+                return   RiskLevel.getRiskForService();
+        }
     }
 }
 

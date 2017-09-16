@@ -17,11 +17,23 @@ public class ClusterManager {
     private final int delta = 5;
 
     public List<MicroService> getMicroServiceCluster(File sourceFiles) {
+
+        String [] projectFiles = sourceFiles.list();
+        String [] servicesList = null;
+        ProcessManager processManager = new ProcessManager();
+        if (processManager.isContainServiceFolder(projectFiles)) {
+            System.out.println("Service folder found");
+
+            File serviceFolder = new File(sourceFiles.getAbsolutePath() + "/" + "Service");
+            servicesList = serviceFolder.list();
+
+        }
+
         List<Class> sourceClassesList = null;
         ClusteringAlgorithm clusteringAlgorithm = new DefaultClusteringAlgorithm();
         Cluster cluster =
                 clusteringAlgorithm.performClustering(sourceClassesList, alpha, beta, gamma, delta);
 
-        return cluster.getMicroServices();
+        return cluster.getMicroServices(servicesList);
     }
 }

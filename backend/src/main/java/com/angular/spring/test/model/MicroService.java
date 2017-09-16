@@ -9,6 +9,15 @@ public class MicroService {
     private RiskLevel riskLevel;
     private List<Class> classes;
 
+    public MicroService() {
+    }
+
+    public MicroService(int id, String serviceName, RiskLevel riskLevel) {
+        this.id = id;
+        this.serviceName = serviceName;
+        this.riskLevel = riskLevel;
+    }
+
     public int getId() {
         return id;
     }
