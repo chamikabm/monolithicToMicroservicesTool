@@ -8,6 +8,7 @@ import com.angular.spring.test.model.RiskLevel;
 import com.angular.spring.test.service.AppService;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -108,6 +109,8 @@ public class AppServiceImpl implements AppService {
     public void saveProjectFiles(MultipartFile file) {
         String destination = "/home/chamika/Projects/monolithicToMicroservicesTool/uploadedProjectFiles";
 
+        cleanFileDirectory(new File(destination));
+
         /**
          * save file to temp
          */
@@ -160,5 +163,17 @@ public class AppServiceImpl implements AppService {
             } else {
                 throw new RuntimeException(projectValidateModel.getMessage());
             }
+    }
+
+    private void cleanFileDirectory (File directory) {
+        if (directory.isDirectory()) {
+            try {
+                System.out.println("Directory cleaned up started..");
+                FileUtils.cleanDirectory(directory);
+                System.out.println("Directory cleaned up completed..");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
