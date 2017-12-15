@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'about',
-  templateUrl: './about.component.html',
-  styleUrls: ['./about.component.css']
+  templateUrl: '../page/about.component.html',
+  styleUrls: ['../style/about.component.css']
 })
 
 export class AboutComponent implements OnInit {

@@ -6,13 +6,10 @@ import { HttpModule }    from '@angular/http';
 import { AppRoutingModule }     from './app-routing.module';
 import { FileSelectDirective } from 'ng2-file-upload';
 
-import { AppComponent }        from './app.component';
-import { DashboardComponent, }        from './dashboard.component';
-import { HeroDetailComponent } from './hero-detail.component';
-import { HeroesComponent }     from './heroes.component';
-import { SourceFileUploaderComponent }     from './source-file-upload.component';
-import { AboutComponent }     from './about.component';
-import { HeroService }         from './hero.service';
+import { AppComponent }        from './component/app.component';
+import { DashboardComponent, }        from './component/dashboard.component';
+import { SourceFileUploaderComponent }     from './component/source-file-upload.component';
+import { AboutComponent }     from './component/about.component';
 
 @NgModule({
   imports: [
@@ -24,15 +21,11 @@ import { HeroService }         from './hero.service';
   declarations: [
     AppComponent,
     DashboardComponent,
-    HeroDetailComponent,
-    HeroesComponent,
     SourceFileUploaderComponent,
     AboutComponent,
     FileSelectDirective
   ],
-  providers: [
-    HeroService
-  ],
+  providers: [],
   bootstrap: [ AppComponent ]
 })
 

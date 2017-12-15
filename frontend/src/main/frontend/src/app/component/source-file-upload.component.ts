@@ -3,12 +3,12 @@ import { FileUploader } from 'ng2-file-upload';
 
 import { Http } from '@angular/http';
 
-import { MicroService } from './micro-service';
+import { MicroService } from '../model/micro-service';
 
 @Component({
   selector: 'source-file-uploader',
-  templateUrl: './source-file-upload.component.html',
-  styleUrls: ['./source-file-upload.component.css']
+  templateUrl: '../page/source-file-upload.component.html',
+  styleUrls: ['../style/source-file-upload.component.css']
 })
 
 export class SourceFileUploaderComponent {
