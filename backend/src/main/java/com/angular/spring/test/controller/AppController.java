@@ -1,7 +1,5 @@
 package com.angular.spring.test.controller;
 
-
-import com.angular.spring.test.model.Hero;
 import com.angular.spring.test.model.MicroService;
 import com.angular.spring.test.service.AppService;
 import org.springframework.beans.factory.annotation.Autowired;

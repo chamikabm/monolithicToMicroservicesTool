@@ -11,6 +11,7 @@ import { DashboardComponent, }        from './dashboard.component';
 import { HeroDetailComponent } from './hero-detail.component';
 import { HeroesComponent }     from './heroes.component';
 import { SourceFileUploaderComponent }     from './source-file-upload.component';
+import { AboutComponent }     from './about.component';
 import { HeroService }         from './hero.service';
 
 @NgModule({
@@ -26,6 +27,7 @@ import { HeroService }         from './hero.service';
     HeroDetailComponent,
     HeroesComponent,
     SourceFileUploaderComponent,
+    AboutComponent,
     FileSelectDirective
   ],
   providers: [
