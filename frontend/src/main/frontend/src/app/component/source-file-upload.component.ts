@@ -101,4 +101,12 @@ export class SourceFileUploaderComponent {
         return 80;
     }
   }
+
+  performNewConversion(): void {
+   location.reload();
+  }
+
+  showToBeAlert(): void {
+    alert("Not yet implemented.");
+  }
 }

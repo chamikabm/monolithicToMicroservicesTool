@@ -12,7 +12,7 @@
   </nav>
   <div class="container">
     <div class="row">
-      <div class="col-md-4">
+      <div *ngIf="!isProcessCompleted" class="col-md-4">
         <form method="post" enctype="multipart/form-data">
           <div class="form-group">
             <label for="single">Upload Project as a Zip file</label>
@@ -25,6 +25,17 @@
             </p>
           </div>
         </form>
+      </div>
+      <div *ngIf="isProcessCompleted" class="container" id="restartTheProcess">
+        <h1 class="jumbotron-heading">Process Result</h1>
+        <p *ngIf="!errormessage" class="lead text-muted">Following report displays the identified microservices from the uploaded code base.</p>
+        <h6 *ngIf="!errormessage">
+          <small class="text-muted">*NOTE : Results may not be always accurate. You may use this tool as a converter guidance</small>
+        </h6>
+        <p>
+          <a (click)="performNewConversion()" class="btn btn-primary">Perform a new Conversion</a>
+          <a *ngIf="!errormessage" (click)="showToBeAlert()" class="btn btn-secondary">Generate a result PDF</a>
+        </p>
       </div>
       <div class="col-md-8">
         <div *ngIf="!isProcessCompleted" id="processingArea">
