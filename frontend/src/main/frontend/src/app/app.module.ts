@@ -10,6 +10,8 @@ import { AppComponent }        from './component/app.component';
 import { DashboardComponent, }        from './component/dashboard.component';
 import { SourceFileUploaderComponent }     from './component/source-file-upload.component';
 import { AboutComponent }     from './component/about.component';
+import { ProjectComponent }     from './component/project.component';
+import { ResourceComponent }     from './component/resource.component';
 
 @NgModule({
   imports: [
@@ -23,6 +25,8 @@ import { AboutComponent }     from './component/about.component';
     DashboardComponent,
     SourceFileUploaderComponent,
     AboutComponent,
+    ProjectComponent,
+    ResourceComponent,
     FileSelectDirective
   ],
   providers: [],
