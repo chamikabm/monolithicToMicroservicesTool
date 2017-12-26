@@ -203,6 +203,10 @@ public class Cluster {
             List<String> list = new ArrayList<String>(Arrays.asList(serviceFiles));
             list.remove("Impl");
             list.replaceAll(x -> x.replace(".java", ""));
+            list.remove("DepartmentService");
+            list.remove("LecturerService");
+            list.remove("StudentService");
+            list.add("Student - Lecturer - DepartmentService");
             list.replaceAll(x -> x.replace("Service", " Service"));
             serviceFiles = list.toArray(new String[0]);
 
@@ -218,14 +222,14 @@ public class Cluster {
 
     private RiskLevel getRiskLevel(String service) {
         switch (service)  {
-            case "Department Service" :
+            case "Payment Service" :
+                return RiskLevel.MEDIUM_RISK;
+            case "Exam Service" :
                 return RiskLevel.MEDIUM_RISK;
             case "Registration Service" :
-                return RiskLevel.LOW_RISK;
-            case "Authentication Service" :
-                return RiskLevel.LOW_RISK;
-            case "Student Service" :
                 return RiskLevel.HIGH_RISK;
+            case "Student - Lecturer - Department Service" :
+                return RiskLevel.LOW_RISK;
             default:
                 return   RiskLevel.getRiskForService();
         }

@@ -89,17 +89,8 @@ export class SourceFileUploaderComponent {
     }
   }
 
-  getImportancePercentage(riskLevel:string):number {
-    switch (riskLevel) {
-      case "LOW_RISK":
-        return 75;
-      case "MEDIUM_RISK":
-        return 63;
-      case "HIGH_RISK":
-        return 72;
-      default:
-        return 80;
-    }
+  getImportancePercentage(riskLevel:string):string {
+    return "TBI";
   }
 
   performNewConversion(): void {
