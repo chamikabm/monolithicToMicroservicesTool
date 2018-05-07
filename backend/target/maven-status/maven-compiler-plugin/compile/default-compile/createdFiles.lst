@@ -2,8 +2,8 @@ com/angular/spring/test/Algorithm/Clustering/CompleteLinkageStrategy.class
 com/angular/spring/test/Algorithm/Clustering/DefaultClusteringAlgorithm.class
 com/angular/spring/test/Algorithm/Clustering/Cluster.class
 com/angular/spring/test/Algorithm/Clustering/DistanceMap.class
-com/angular/spring/test/model/MicroService.class
 com/angular/spring/test/manager/ClusterManager.class
+com/angular/spring/test/model/MicroService.class
 com/angular/spring/test/Algorithm/Clustering/HierarchyBuilder.class
 com/angular/spring/test/controller/AppController.class
 com/angular/spring/test/service/AppService.class

@@ -14,7 +14,7 @@ public class ProcessManager {
         String projectRootLocation = System.getProperty("user.dir");
         System.out.println("Project Root Location : " + projectRootLocation);
 
-        String filesRoot = "/home/chamika/Projects/monolithicToMicroservicesTool/uploadedProjectFiles";
+        String filesRoot = "/Users/Chamikabandara/Projects/MyProjects/monolithicToMicroservicesTool/uploadedProjectFiles";
         System.out.println("files root : " + filesRoot);
 
         File file = new File(filesRoot);

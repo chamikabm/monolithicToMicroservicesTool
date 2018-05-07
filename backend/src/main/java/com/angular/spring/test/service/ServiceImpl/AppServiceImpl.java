@@ -28,7 +28,7 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public void saveProjectFiles(MultipartFile file) {
-        String destination = "/home/chamika/Projects/monolithicToMicroservicesTool/uploadedProjectFiles";
+        String destination = "/Users/Chamikabandara/Projects/MyProjects/monolithicToMicroservicesTool/uploadedProjectFiles";
 
         cleanFileDirectory(new File(destination));
 
