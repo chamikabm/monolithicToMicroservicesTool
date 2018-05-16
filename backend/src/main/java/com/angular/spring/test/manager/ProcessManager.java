@@ -4,6 +4,7 @@ import com.angular.spring.test.model.MicroService;
 import com.angular.spring.test.model.ProjectValidateModel;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -90,7 +91,7 @@ public class ProcessManager {
         return new File(absolutePath + "/" + nextPath);
     }
 
-    public List<MicroService> getAllMicroServices(File projectFiles) {
+    public List<MicroService> getAllMicroServices(File projectFiles) throws IOException {
         if (projectFiles == null) {
             return null;
         } else {
@@ -101,7 +102,7 @@ public class ProcessManager {
         }
     }
 
-    public boolean isContainServiceFolder(String[] filesList) {
+    boolean isContainServiceFolder(String[] filesList) {
         return Arrays.asList(filesList).contains("Service");
     }
 }

@@ -50,4 +50,13 @@ public class MicroService {
     public void setClasses(List<Class> classes) {
         this.classes = classes;
     }
+
+    @Override
+    public String toString() {
+        return "MicroService{" +
+                "id=" + id +
+                ", serviceName='" + serviceName + '\'' +
+                ", riskLevel=" + riskLevel +
+                '}';
+    }
 }

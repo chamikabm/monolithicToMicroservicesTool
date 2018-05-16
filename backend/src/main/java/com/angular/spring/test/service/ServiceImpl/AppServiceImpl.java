@@ -65,7 +65,7 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public List<MicroService> process() throws RuntimeException {
+    public List<MicroService> process() throws RuntimeException, IOException {
         System.out.println("Analyzing started..." + new Date());
 
 
