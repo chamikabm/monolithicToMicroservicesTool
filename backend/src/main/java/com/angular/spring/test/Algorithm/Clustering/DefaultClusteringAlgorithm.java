@@ -1,21 +1,25 @@
 package com.angular.spring.test.Algorithm.Clustering;
 
-import com.angular.spring.test.model.MicroService;
-import com.angular.spring.test.model.RiskLevel;
+import com.angular.spring.test.manager.ClusterManager;
+import com.angular.spring.test.manager.models.MicroService;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.Callable;
 
 import static com.angular.spring.test.Algorithm.Clustering.Resources.clMap;
 
-public class DefaultClusteringAlgorithm implements ClusteringAlgorithm{
+public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
+
+    private static List<MicroService> initalmicroServicesClsuters = new ArrayList<>();
 
     @Override
     public Cluster performClustering(double[][] distances,
@@ -53,42 +57,51 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm{
     }
 
     @Override
-    public List<MicroService> performClustering(String[] sourceClassesList, String filesPath) throws IOException {
+    public Object performClustering(String[] sourceClassesList, String filesPath) throws IOException {
 
-
+        ClusterManager clusterManager = new ClusterManager();
         String implFilePath = filesPath + "/" + sourceClassesList[0];
 
         File implFolder  = new File(implFilePath);
         String [] servicesImplList = implFolder.list();
-        System.out.println(Arrays.toString(servicesImplList));
 
         //Visit inside all the services and grab the data.
         CompilationUnit cu;
         assert servicesImplList != null;
-        for(int i = 1; i<servicesImplList.length; i++)
-            try (FileInputStream in = new FileInputStream(implFilePath + "/" + servicesImplList[1])) {
-            // parse the file
-            cu = JavaParser.parse(in);
+        for(int i = 1; i<2; i++) {
+            File file = new File(implFilePath + "/" + servicesImplList[i]);
+            try (FileInputStream in = new FileInputStream(file)) {
+                System.out.println("********** : " + servicesImplList[i]);
+                // parse the file
+                cu = JavaParser.parse(in);
 
-            // visit and print the methods names
-            new MethodVisitor().visit(cu, null);
+                initalmicroServicesClsuters.add(getInitialMicroServiceCluster(servicesImplList[i]));
+                // visit and print the methods names
+//            new MethodVisitor().visit(cu, null);
+//            new ClassVisitor().visit(cu, null);
+//                findAllServiceClassses(cu);
+                getClassDeclaration(cu, file);
+
+            }
+
         }
 
         Resources resources = new Resources();
         resources.init();
 
-        //Pushing results to tree map to keep the order.
-        TreeMap<String, Object> treeMap = new TreeMap<>(clMap);
+        TreeMap treeMap = dansMethod(this::methodToPass);
 
-        for (String cluster : treeMap.keySet()) {
+        // TO DO Enable after all.
+        /*assert treeMap != null;
+        for (Object cluster : treeMap.keySet()) {
 
             System.out.println("--------------" + cluster + "--------------");
-            System.out.println(getMicroServicesFromCluster(treeMap.get(cluster)));
+            System.out.println(clusterManager.getMicroServicesFromCluster(treeMap.get(cluster)));
         }
 
-        System.out.println("-----------------------------------");
+        System.out.println("-----------------------------------");*/
 
-        return getMicroServicesFromCluster(treeMap.get(treeMap.lastKey()));
+        return treeMap.get(treeMap.lastKey());
     }
 
     private void checkArguments(double[][] distances, String[] clusterNames,
@@ -162,7 +175,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm{
 
     private List<Cluster> createClusters(String[] clusterNames)
     {
-        List<Cluster> clusters = new ArrayList<Cluster>();
+        List<Cluster> clusters = new ArrayList<>();
         for (String clusterName : clusterNames)
         {
             Cluster cluster = new Cluster(clusterName);
@@ -173,7 +186,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm{
 
     private List<Cluster> createClusters(String[] clusterNames, double[] weights)
     {
-        List<Cluster> clusters = new ArrayList<Cluster>();
+        List<Cluster> clusters = new ArrayList<>();
         for (int i = 0; i < weights.length; i++)
         {
             Cluster cluster = new Cluster(clusterNames[i]);
@@ -190,43 +203,80 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm{
             // here you can access the attributes of the method.
             // this method will be called for all methods in this
             // CompilationUnit, including inner class methods
-            System.out.println(n.getName());
-            System.out.println(n.getDeclarationAsString(
-                    true,
-                    true,
-                    true));
-            System.out.println(n.getBody());
+//            System.out.println(n.getName());
+//            System.out.println(n.getDeclarationAsString(
+//                    true,
+//                    true,
+//                    true));
+//            System.out.println(n.getBody());
         }
     }
 
-    private List<MicroService> getMicroServicesFromCluster(Object clusteredServices) {
+    private static class ClassVisitor extends VoidVisitorAdapter {
 
-        List<MicroService> microServices = new ArrayList<>();
-        JSONObject jsonObject = (JSONObject) clusteredServices;
-        int i =1;
 
-        HashMap<String, Object> serviceMap = (HashMap<String, Object>) jsonObject;
+        @Override
+        public void visit(ClassExpr n, Object arg) {
 
-        for (String service : serviceMap.keySet()) {
-            HashMap<String, Double> serviceData = (HashMap<String, Double>)serviceMap.get(service);
-            System.out.println(serviceData.get("sValue"));
-            microServices.add(new MicroService(i++, service, getRiskLevelForService(serviceData.get("sValue"))));
+            System.out.println(Arrays.toString(n.getClass().getInterfaces()));
+            System.out.println(n.getType());
         }
-
-        return microServices;
     }
 
+    private TreeMap<String, Object> methodToPass() {
+        return new TreeMap<>(clMap);
+    }
 
-    private RiskLevel getRiskLevelForService(Double fValue) {
+    private TreeMap dansMethod(Callable<TreeMap<String, Object>> myFunc) {
 
-        if (fValue >= 0.95) {
-            return RiskLevel.NO_RISK;
-        } else if (fValue >= 0.80) {
-            return RiskLevel.LOW_RISK;
-        } else if (fValue >= 0.75) {
-            return RiskLevel.MEDIUM_RISK;
-        } else {
-            return RiskLevel.HIGH_RISK;
+        try {
+            return myFunc.call();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        return null;
+    }
+
+    private MicroService getInitialMicroServiceCluster(String name) {
+
+        return new MicroService(name);
+    }
+
+    private void findAllServiceClassses(CompilationUnit compilationUnit) {
+        compilationUnit.findAll(ClassOrInterfaceDeclaration.class).stream()
+                .filter(c -> !c.isInterface()
+                        && c.isAbstract()
+                        && !c.getNameAsString().endsWith("Service"))
+                .forEach(c -> {
+                    String className = c.getNameAsString();
+                    System.out.println("Class Name " + className);
+                });
+    }
+
+    private static void getClassDeclaration(CompilationUnit compilationUnit, File file) {
+        final String filename = file.getName();
+        final String className = filename.replaceAll("(.*)\\.java$", "$1");
+
+        if (className.length() == file.getName().length()) {
+            throw new IllegalStateException("Couldn't extract [Java] class name from filename: " + filename);
+        }
+
+        Optional<ClassOrInterfaceDeclaration> classDeclaration = compilationUnit.getTypes().stream()
+                .filter(ClassOrInterfaceDeclaration.class::isInstance)
+                .map(ClassOrInterfaceDeclaration.class::cast)
+                .findFirst();
+
+         //Give all class details
+         //System.out.println(classDeclaration.get());
+
+        //Give all class members including methods
+        //System.out.println(classDeclaration.get().getMembers());
+
+        //Give all class members including methods
+        System.out.println(classDeclaration.get().getFields());
+
+        // Get Implemented File - Interface
+        //System.out.println(classDeclaration.get().getImplementedTypes());
     }
 }

@@ -1,11 +1,11 @@
 package com.angular.spring.test.manager;
 
-import com.angular.spring.test.model.MicroService;
+import com.angular.spring.test.manager.models.MicroService;
 
 public class FitnessFunctionManager {
 
-    public float calculateFitnessFunction(int alpha, int beta, int gamma, int delta, MicroService microService) {
-        float fitnessValue;
+    public Double calculateFitnessFunction(int alpha, int beta, int gamma, int delta, MicroService microService) {
+        Double fitnessValue = 0.0;
         int n = alpha + beta + gamma + delta;
 
         fitnessValue = (alpha*measureFunctionality(microService)+
@@ -16,8 +16,8 @@ public class FitnessFunctionManager {
         return fitnessValue;
     }
 
-    private float measureFunctionality (MicroService microService) {
-        float functionalityValue;
+    public Double measureFunctionality (MicroService microService) {
+        Double functionalityValue = 0.0;
 
         functionalityValue = (
                 computeNumberOfProvidedInterfaces(microService)+
@@ -30,29 +30,29 @@ public class FitnessFunctionManager {
         return functionalityValue;
     }
 
-    private float measureComposability(MicroService microService) {
-        float comparabilityValue;
+    public Double measureComposability(MicroService microService) {
+        Double comparabilityValue = 0.0;
 
-        int I = microService.getClasses().size();
-        float totalInternalCohesion= computeCohesionWithInInterface(microService);
+        int I = microService.getChildren().size();
+        Double totalInternalCohesion= computeCohesionWithInInterface(microService);
 
         comparabilityValue = totalInternalCohesion/I;
 
         return comparabilityValue;
     }
 
-    private float measureSelfContainment(MicroService microService) {
-        float selfContainmentValue;
+    public Double measureSelfContainment(MicroService microService) {
+        Double selfContainmentValue = 0.0;
 
         selfContainmentValue = computeExternalCoupling(microService);
 
         return selfContainmentValue;
     }
 
-    private float measureUsage(MicroService microService) {
-        float usageValue;
-        float inheritanceFactor;
-        float compositionFactor;
+    public Double measureUsage(MicroService microService) {
+        Double usageValue = 0.0;
+        Double inheritanceFactor = 0.0;
+        Double compositionFactor = 0.0;
 
         inheritanceFactor = getInheritanceFactor(microService);
         compositionFactor = getCompositionFactor(microService);
@@ -63,10 +63,10 @@ public class FitnessFunctionManager {
     }
 
     private int computeLoseClassCohesion(MicroService microService) {
-        int LCC;
-        int numberOfIndirectConnections;
-        int numberOfDirectConnections;
-        int maxPossibleConnections;
+        int LCC = 0;
+        int numberOfIndirectConnections = 0;
+        int numberOfDirectConnections = 0;
+        int maxPossibleConnections = 0;
 
         numberOfIndirectConnections = getNumberOfIndirectConnections(microService);
         numberOfDirectConnections = getNumberOfDirectConnections(microService);
@@ -93,8 +93,8 @@ public class FitnessFunctionManager {
      * Compute the internal coupling
      * @return - couple - internal coupling
      */
-    private float computeInternalCoupling(MicroService microService) {
-        float couple = 0.0f;
+    private Double computeInternalCoupling(MicroService microService) {
+        Double couple = 0.0;
 
         return couple;
     }
@@ -103,8 +103,8 @@ public class FitnessFunctionManager {
      * Compute the external coupling of a service
      * @return -extCouple
      */
-    private float computeExternalCoupling(MicroService microService) {
-        float extCouple = 0.0f;
+    private Double computeExternalCoupling(MicroService microService) {
+        Double extCouple = 0.0;
         extCouple = 1 - computeInternalCoupling(microService);
 
         return extCouple;
@@ -114,27 +114,27 @@ public class FitnessFunctionManager {
      * Compute the average of service’s interface cohesion within the interface,
      * @return LCC(i) of the service
      */
-    private float computeCohesionWithInInterface(MicroService microService) {
-        float LCCi = 0.0f;
-        int totalClasses = microService.getClasses().size();
+    private Double computeCohesionWithInInterface(MicroService microService) {
+        Double LCCi = 0.0;
+        int totalClasses = microService.getChildren().size();
 
         for (int i=0; i< totalClasses; i++) {
-            LCCi = LCCi + computeInterfaceLCC(microService.getClasses().get(i));
+           // LCCi = LCCi + computeInterfaceLCC(microService.getChildren().get(i));
         }
 
         return LCCi;
     }
 
-    private float computeInterfaceLCC(Class projectClass) {
-        return 0;
+    private Double computeInterfaceLCC(MicroService microService) {
+        return 0.0;
     }
 
     /**
      * Compute the cohesion between interfaces
      * @return LCC(I)
      */
-    private float computeCohesionBetweenInterfaces(MicroService microService) {
-        float LCCI = 0.0f;
+    private Double computeCohesionBetweenInterfaces(MicroService microService) {
+        Double LCCI = 0.0;
 
         return LCCI;
     }
@@ -143,8 +143,8 @@ public class FitnessFunctionManager {
      *Compute the cohesion inside a service
      * @return LLC(E)
      */
-    private float computeCohesionInsideService(MicroService microService) {
-        float LCCE = 0.0f;
+    private Double computeCohesionInsideService(MicroService microService) {
+        Double LCCE = 0.0;
 
         return LCCE;
     }
@@ -159,11 +159,11 @@ public class FitnessFunctionManager {
         return np;
     }
 
-    private float getCompositionFactor(MicroService microService) {
-        return 0;
+    private Double getCompositionFactor(MicroService microService) {
+        return 0.0;
     }
 
-    private float getInheritanceFactor(MicroService microService) {
-        return 0;
+    private Double getInheritanceFactor(MicroService microService) {
+        return 0.0;
     }
 }

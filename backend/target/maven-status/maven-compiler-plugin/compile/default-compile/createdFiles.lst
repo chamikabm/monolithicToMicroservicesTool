@@ -6,9 +6,9 @@ com/angular/spring/test/manager/ClusterManager.class
 com/angular/spring/test/model/MicroService.class
 com/angular/spring/test/Algorithm/Clustering/HierarchyBuilder.class
 com/angular/spring/test/ProjectConstants.class
-com/angular/spring/test/Algorithm/Clustering/DefaultClusteringAlgorithm$1.class
 com/angular/spring/test/controller/AppController.class
 com/angular/spring/test/service/AppService.class
+com/angular/spring/test/manager/models/MicroService.class
 com/angular/spring/test/Algorithm/Clustering/SingleLinkageStrategy.class
 com/angular/spring/test/Algorithm/Clustering/WeightedLinkageStrategy.class
 com/angular/spring/test/Algorithm/Clustering/Distance.class
@@ -20,6 +20,7 @@ com/angular/spring/test/service/ServiceImpl/AppServiceImpl.class
 com/angular/spring/test/model/ProjectValidateModel.class
 com/angular/spring/test/Algorithm/Clustering/PDistClusteringAlgorithm.class
 com/angular/spring/test/Algorithm/Clustering/DistanceMap$Item.class
+com/angular/spring/test/Algorithm/Clustering/DefaultClusteringAlgorithm$ClassVisitor.class
 com/angular/spring/test/Algorithm/Clustering/Resources.class
 com/angular/spring/test/Algorithm/Clustering/DefaultClusteringAlgorithm$MethodVisitor.class
 com/angular/spring/test/manager/FitnessFunctionManager.class

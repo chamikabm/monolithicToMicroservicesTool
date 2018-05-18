@@ -1,7 +1,5 @@
 package com.angular.spring.test.Algorithm.Clustering;
 
-import com.angular.spring.test.model.MicroService;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -14,5 +12,5 @@ public interface ClusteringAlgorithm {
     List<Cluster> performFlatClustering(double[][] distances, String[] clusterNames, LinkageStrategy linkageStrategy,
                                         Double threshold);
 
-    List<MicroService> performClustering(String[] servicesNames, String filesPath) throws IOException;
+    Object performClustering(String[] servicesNames, String filesPath) throws IOException;
 }

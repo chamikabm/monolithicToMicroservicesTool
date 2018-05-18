@@ -1,7 +1,5 @@
 package com.angular.spring.test.Algorithm.Clustering;
 
-import com.angular.spring.test.model.MicroService;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +60,7 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
     }
 
     @Override
-    public List<MicroService> performClustering(String[] servicesList, String filesPath) {
+    public Object performClustering(String[] servicesList, String filesPath) {
         return null;
     }
 
