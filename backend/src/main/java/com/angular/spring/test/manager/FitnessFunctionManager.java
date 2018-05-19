@@ -1,6 +1,8 @@
 package com.angular.spring.test.manager;
 
 import com.angular.spring.test.manager.models.MicroService;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 public class FitnessFunctionManager {
 
@@ -17,7 +19,7 @@ public class FitnessFunctionManager {
     }
 
     public Double measureFunctionality (MicroService microService) {
-        Double functionalityValue = 0.0;
+        Double functionalityValue;
 
         functionalityValue = (
                 computeNumberOfProvidedInterfaces(microService)+
@@ -31,7 +33,7 @@ public class FitnessFunctionManager {
     }
 
     public Double measureComposability(MicroService microService) {
-        Double comparabilityValue = 0.0;
+        Double comparabilityValue;
 
         int I = microService.getChildren().size();
         Double totalInternalCohesion= computeCohesionWithInInterface(microService);
@@ -42,7 +44,7 @@ public class FitnessFunctionManager {
     }
 
     public Double measureSelfContainment(MicroService microService) {
-        Double selfContainmentValue = 0.0;
+        Double selfContainmentValue;
 
         selfContainmentValue = computeExternalCoupling(microService);
 
@@ -50,9 +52,9 @@ public class FitnessFunctionManager {
     }
 
     public Double measureUsage(MicroService microService) {
-        Double usageValue = 0.0;
-        Double inheritanceFactor = 0.0;
-        Double compositionFactor = 0.0;
+        Double usageValue;
+        Double inheritanceFactor;
+        Double compositionFactor;
 
         inheritanceFactor = getInheritanceFactor(microService);
         compositionFactor = getCompositionFactor(microService);
@@ -134,6 +136,8 @@ public class FitnessFunctionManager {
      * @return LCC(I)
      */
     private Double computeCohesionBetweenInterfaces(MicroService microService) {
+        NodeList<ClassOrInterfaceType> interfaces = microService.getInterfaces();
+
         Double LCCI = 0.0;
 
         return LCCI;
@@ -155,9 +159,7 @@ public class FitnessFunctionManager {
      */
     private int computeNumberOfProvidedInterfaces(MicroService microService) {
 
-        int np = 0;
-
-        return np;
+        return microService.getInterfaces().size();
     }
 
     private Double getCompositionFactor(MicroService microService) {

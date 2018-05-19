@@ -91,7 +91,6 @@ public class HierarchyBuilder {
                 MicroService updatedMicroService = getUpdatedMicroService(oldClusterL.getMicroService(),
                         oldClusterR.getMicroService());
                 if (updatedMicroService != null) {
-                    System.out.println(updatedMicroService);
                     newCluster.setMicroService(updatedMicroService);
                 }
             }
