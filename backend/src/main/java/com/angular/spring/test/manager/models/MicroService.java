@@ -1,7 +1,11 @@
 package com.angular.spring.test.manager.models;
 
 import com.angular.spring.test.Algorithm.Clustering.Distance;
-import com.angular.spring.test.manager.FitnessFunctionManager;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 import java.util.List;
 import static com.angular.spring.test.ProjectConstants.*;
@@ -18,6 +22,10 @@ public class MicroService {
     private List<String> children;
     private List<String> leafNames;
     private Distance distance = new Distance();
+    private ClassOrInterfaceDeclaration  classOrInterfaceDeclarationInfo;
+    private NodeList<BodyDeclaration<?>> members;
+    private List<FieldDeclaration> fields;
+    private NodeList<ClassOrInterfaceType> interfaces;
 
     public MicroService(String name) {
         if (getServiceNamesCount(name) > 1) {
@@ -174,5 +182,67 @@ public class MicroService {
 
     private boolean containsService(List<String> list, String name){
         return list.stream().anyMatch(str -> str.trim().equals(name));
+    }
+
+    public void setClassDeclarationInfo(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
+        this.classOrInterfaceDeclarationInfo = classOrInterfaceDeclaration;
+    }
+
+    public ClassOrInterfaceDeclaration getClassOrInterfaceDeclarationInfo() {
+        return classOrInterfaceDeclarationInfo;
+    }
+
+    public void setMembers(NodeList<BodyDeclaration<?>> members) {
+        this.members = members;
+    }
+
+    public NodeList<BodyDeclaration<?>> getMembers() {
+        return members;
+    }
+
+    public void setFields(List<FieldDeclaration> fields) {
+        this.fields = fields;
+    }
+
+    public List<FieldDeclaration> getFields() {
+        return fields;
+    }
+
+    public void setInterfaces(NodeList<ClassOrInterfaceType> interfaces) {
+        this.interfaces = interfaces;
+    }
+
+    public NodeList<ClassOrInterfaceType> getInterfaces() {
+        return interfaces;
+    }
+
+
+    @Override
+    public int hashCode()
+    {
+        return name.hashCode() + FValue.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (this == obj)
+        {
+            return true;
+        }
+        if (this.getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final MicroService other = (MicroService) obj;
+        if (this.name == null ? other.name != null : !this.FValue.equals(other.FValue))
+        {
+            return false;
+        }
+        return this.name == null || this.FValue.equals(other.FValue);
     }
 }

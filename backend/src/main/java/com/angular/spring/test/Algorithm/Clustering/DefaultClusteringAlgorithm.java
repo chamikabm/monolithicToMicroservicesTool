@@ -14,19 +14,19 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.angular.spring.test.Algorithm.Clustering.Resources.clMap;
 
 public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
 
-    private static List<MicroService> initalmicroServicesClsuters = new ArrayList<>();
+    private static List<MicroService> initialMicroServicesClusters = new ArrayList<>();
 
     @Override
     public Cluster performClustering(double[][] distances,
                                      String[] clusterNames, LinkageStrategy linkageStrategy)
     {
 
-    checkArguments(distances, clusterNames, linkageStrategy);
     /* Setup model */
     List<Cluster> clusters = createClusters(clusterNames);
     DistanceMap linkages = createLinkages(distances, clusters);
@@ -39,14 +39,13 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
     }
 
         return builder.getRootCluster();
-}
+    }
 
     @Override
     public List<Cluster> performFlatClustering(double[][] distances,
                                                String[] clusterNames, LinkageStrategy linkageStrategy, Double threshold)
     {
 
-        checkArguments(distances, clusterNames, linkageStrategy);
     /* Setup model */
         List<Cluster> clusters = createClusters(clusterNames);
         DistanceMap linkages = createLinkages(distances, clusters);
@@ -65,65 +64,76 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
         File implFolder  = new File(implFilePath);
         String [] servicesImplList = implFolder.list();
 
-        //Visit inside all the services and grab the data.
-        CompilationUnit cu;
-        assert servicesImplList != null;
-        for(int i = 1; i<2; i++) {
-            File file = new File(implFilePath + "/" + servicesImplList[i]);
-            try (FileInputStream in = new FileInputStream(file)) {
-                System.out.println("********** : " + servicesImplList[i]);
-                // parse the file
-                cu = JavaParser.parse(in);
-
-                initalmicroServicesClsuters.add(getInitialMicroServiceCluster(servicesImplList[i]));
-                // visit and print the methods names
-//            new MethodVisitor().visit(cu, null);
-//            new ClassVisitor().visit(cu, null);
-//                findAllServiceClassses(cu);
-                getClassDeclaration(cu, file);
-
-            }
-
-        }
-
         Resources resources = new Resources();
         resources.init();
 
-        TreeMap treeMap = dansMethod(this::methodToPass);
+        //Visit inside all the services and grab the data.
+        CompilationUnit cu;
+        assert servicesImplList != null;
+        for(int i = 1; i < servicesImplList.length; i++) {
+            File file = new File(implFilePath + "/" + servicesImplList[i]);
+            try (FileInputStream in = new FileInputStream(file)) {
+                cu = JavaParser.parse(in);
+                updateInitialServiceCluster(cu, file);
+            }
+        }
 
-        // TO DO Enable after all.
-        /*assert treeMap != null;
+        double[][] initialDistances = getUpdatedInitialDistances(initialMicroServicesClusters);
+        System.out.println(Arrays.deepToString(initialDistances));
+        LinkageStrategy linkageStrategy = new SingleLinkageStrategy();
+
+        checkArguments(initialDistances, initialMicroServicesClusters, linkageStrategy);
+
+        // Setup model
+        List<Cluster> clusters = getClusters(initialMicroServicesClusters);
+        DistanceMap linkages = createLinkagesForClusters(initialDistances, clusters);
+
+        // Process
+        HierarchyBuilder builder = new HierarchyBuilder(clusters, linkages);
+        while (!builder.isTreeComplete())
+        {
+            builder.agglomerate(linkageStrategy);
+        }
+
+        TreeMap treeMap = builder.getAllClusters();
+
+        assert treeMap != null;
         for (Object cluster : treeMap.keySet()) {
 
             System.out.println("--------------" + cluster + "--------------");
             System.out.println(clusterManager.getMicroServicesFromCluster(treeMap.get(cluster)));
         }
 
-        System.out.println("-----------------------------------");*/
+        System.out.println("-----------------------------------");
 
         return treeMap.get(treeMap.lastKey());
     }
 
-    private void checkArguments(double[][] distances, String[] clusterNames,
-                                LinkageStrategy linkageStrategy)
+    private double[][] getUpdatedInitialDistances(List<MicroService> initialMicroServicesClusters) {
+        double[][]  initialDistances = new double[initialMicroServicesClusters.size()][2];
+
+       for (int i = 0 ; i < initialDistances.length; i++) {
+           initialDistances[i][1] = initialMicroServicesClusters.get(i).getFValue();
+           initialDistances[i][0] = i + 1;
+       }
+
+        return initialDistances;
+    }
+
+    private void checkArguments(double[][] distances, List<MicroService> clusters, LinkageStrategy linkageStrategy)
     {
-        if (distances == null || distances.length == 0
-                || distances[0].length != distances.length)
+
+        if (distances[0].length != 2 &&  distances.length <= 2)
         {
             throw new IllegalArgumentException("Invalid distance matrix");
         }
-        if (distances.length != clusterNames.length)
+        if (distances.length != clusters.size())
         {
             throw new IllegalArgumentException("Invalid cluster name array");
         }
         if (linkageStrategy == null)
         {
             throw new IllegalArgumentException("Undefined linkage strategy");
-        }
-        int uniqueCount = new HashSet<>(Arrays.asList(clusterNames)).size();
-        if (uniqueCount != clusterNames.length)
-        {
-            throw new IllegalArgumentException("Duplicate names");
         }
     }
 
@@ -132,7 +142,6 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
                                              double[] weights, LinkageStrategy linkageStrategy)
     {
 
-        checkArguments(distances, clusterNames, linkageStrategy);
 
         if (weights.length != clusterNames.length)
         {
@@ -171,6 +180,45 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
             }
         }
         return linkages;
+    }
+
+    private DistanceMap createLinkagesForClusters(double[][] distances,
+                                                  List<Cluster> clusters) {
+
+        double[][] initialEuclideanDistance = getEuclideanDistances(distances);
+        return  createLinkages(initialEuclideanDistance, clusters);
+    }
+
+    private double[][] getEuclideanDistances(double[][] distances) {
+        double[][] euclideanDistancesMatrix = new double[distances.length][distances.length];
+
+        for (int i = 0; i < distances.length; i++) {
+            for (int j = 0; j < distances.length; j++) {
+                if (i == j) {
+                    euclideanDistancesMatrix[i][j] = 0.0;
+                } else {
+                    euclideanDistancesMatrix[i][j] = euclideanDistancesForSingleCluster(distances[i], distances[j]);
+                }
+            }
+        }
+
+        return euclideanDistancesMatrix;
+    }
+
+    private double euclideanDistancesForSingleCluster(double[] pointOne, double[] pointTwo) {
+        return Math.sqrt((pointOne[0]-pointTwo[0])*2 + (pointOne[1] - pointTwo[1])*2);
+    }
+
+    public List<Cluster> getClusters(List<MicroService> initialMicroServicesClusters) {
+        List<Cluster> initialClusters = new ArrayList<>();
+
+        for (MicroService microService : initialMicroServicesClusters){
+            Cluster cluster = new Cluster(microService.getName());
+            cluster.setDistance(new Distance(microService.getFValue()));
+            initialClusters.add(cluster);
+        }
+
+        return  initialClusters;
     }
 
     private List<Cluster> createClusters(String[] clusterNames)
@@ -223,22 +271,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
         }
     }
 
-    private TreeMap<String, Object> methodToPass() {
-        return new TreeMap<>(clMap);
-    }
-
-    private TreeMap dansMethod(Callable<TreeMap<String, Object>> myFunc) {
-
-        try {
-            return myFunc.call();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    private MicroService getInitialMicroServiceCluster(String name) {
+    private static MicroService getInitialMicroServiceCluster(String name) {
 
         return new MicroService(name);
     }
@@ -254,12 +287,12 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
                 });
     }
 
-    private static void getClassDeclaration(CompilationUnit compilationUnit, File file) {
+    private static void updateInitialServiceCluster(CompilationUnit compilationUnit, File file) {
         final String filename = file.getName();
         final String className = filename.replaceAll("(.*)\\.java$", "$1");
 
         if (className.length() == file.getName().length()) {
-            throw new IllegalStateException("Couldn't extract [Java] class name from filename: " + filename);
+            throw new IllegalStateException("Couldn't extract [Java] class from filename: " + filename);
         }
 
         Optional<ClassOrInterfaceDeclaration> classDeclaration = compilationUnit.getTypes().stream()
@@ -267,16 +300,13 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
                 .map(ClassOrInterfaceDeclaration.class::cast)
                 .findFirst();
 
-         //Give all class details
-         //System.out.println(classDeclaration.get());
+        MicroService microService = getInitialMicroServiceCluster(classDeclaration.get().getName().asString());
+        microService.setClassDeclarationInfo(classDeclaration.get());
+        microService.setFValue(ThreadLocalRandom.current().nextDouble(0.5, 0.97));
+        microService.setMembers(classDeclaration.get().getMembers());
+        microService.setFields(classDeclaration.get().getFields());
+        microService.setInterfaces(classDeclaration.get().getImplementedTypes());
 
-        //Give all class members including methods
-        //System.out.println(classDeclaration.get().getMembers());
-
-        //Give all class members including methods
-        System.out.println(classDeclaration.get().getFields());
-
-        // Get Implemented File - Interface
-        //System.out.println(classDeclaration.get().getImplementedTypes());
+        initialMicroServicesClusters.add(microService);
     }
 }

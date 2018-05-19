@@ -3,6 +3,10 @@ package com.angular.spring.test.Algorithm.Clustering;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.TreeMap;
+import java.util.concurrent.Callable;
+
+import static com.angular.spring.test.Algorithm.Clustering.Resources.clMap;
 
 public class HierarchyBuilder {
 
@@ -97,4 +101,24 @@ public class HierarchyBuilder {
         }
         return clusters.get(0);
     }
+
+    public TreeMap getAllClusters() {
+        return dansMethod(this::methodToPass);
+    }
+
+    private TreeMap<String, Object> methodToPass() {
+        return new TreeMap<>(clMap);
+    }
+
+    private static TreeMap dansMethod(Callable<TreeMap<String, Object>> myFunc) {
+
+        try {
+            return myFunc.call();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }
