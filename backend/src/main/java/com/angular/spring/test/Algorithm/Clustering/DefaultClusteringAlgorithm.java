@@ -13,10 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static com.angular.spring.test.Algorithm.Clustering.Resources.clMap;
 
 public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
 
@@ -70,7 +67,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
         //Visit inside all the services and grab the data.
         CompilationUnit cu;
         assert servicesImplList != null;
-        for(int i = 1; i < servicesImplList.length; i++) {
+        for(int i = 0; i < servicesImplList.length; i++) {
             File file = new File(implFilePath + "/" + servicesImplList[i]);
             try (FileInputStream in = new FileInputStream(file)) {
                 cu = JavaParser.parse(in);
@@ -97,14 +94,14 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
 
         TreeMap treeMap = builder.getAllClusters();
 
-        assert treeMap != null;
+/*        assert treeMap != null;
         for (Object cluster : treeMap.keySet()) {
 
             System.out.println("--------------" + cluster + "--------------");
             System.out.println(clusterManager.getMicroServicesFromCluster(treeMap.get(cluster)));
         }
 
-        System.out.println("-----------------------------------");
+        System.out.println("-----------------------------------");*/
 
         return treeMap.get(treeMap.lastKey());
     }
@@ -215,6 +212,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
         for (MicroService microService : initialMicroServicesClusters){
             Cluster cluster = new Cluster(microService.getName());
             cluster.setDistance(new Distance(microService.getFValue()));
+            cluster.setMicroService(microService);
             initialClusters.add(cluster);
         }
 

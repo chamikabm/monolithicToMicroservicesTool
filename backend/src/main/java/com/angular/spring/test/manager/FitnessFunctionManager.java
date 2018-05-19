@@ -166,4 +166,9 @@ public class FitnessFunctionManager {
     private Double getInheritanceFactor(MicroService microService) {
         return 0.0;
     }
+
+    public Double calculateNewFitnessFunctionValue (MicroService microService) {
+
+        return microService == null ? new Double(0.0) : microService.getFValue();
+    }
 }

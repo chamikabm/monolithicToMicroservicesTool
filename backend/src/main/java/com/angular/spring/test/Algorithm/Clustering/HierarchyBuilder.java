@@ -1,12 +1,15 @@
 package com.angular.spring.test.Algorithm.Clustering;
 
+import com.angular.spring.test.manager.FitnessFunctionManager;
+import com.angular.spring.test.manager.models.MicroService;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.concurrent.Callable;
 
-import static com.angular.spring.test.Algorithm.Clustering.Resources.clMap;
+import static com.angular.spring.test.Algorithm.Clustering.Resources.clustersMap;
 
 public class HierarchyBuilder {
 
@@ -36,13 +39,9 @@ public class HierarchyBuilder {
     {
         while((!isTreeComplete()) && (distances.minDist() != null) && (distances.minDist() <= threshold))
         {
-            //System.out.println("Cluster Distances: " + distances.toString());
-            //System.out.println("Cluster Size: " + clusters.size());
             agglomerate(linkageStrategy);
         }
 
-        //System.out.println("Final MinDistance: " + distances.minDist());
-        //System.out.println("Tree complete: " + isTreeComplete());
         return clusters;
     }
 
@@ -83,8 +82,55 @@ public class HierarchyBuilder {
                 distances.add(newLinkage);
 
             }
+
+            if (oldClusterL  != null && oldClusterR != null) {
+                MicroService updatedMicroService = getUpdatedMicroService(oldClusterL.getMicroService(),
+                        oldClusterR.getMicroService());
+                if (updatedMicroService != null) {
+                    System.out.println(updatedMicroService);
+                    newCluster.setMicroService(updatedMicroService);
+                }
+            }
+
             clusters.add(newCluster);
         }
+    }
+
+    private MicroService getUpdatedMicroService(MicroService leftMicroService, MicroService rightMicroService) {
+
+        if (leftMicroService != null && rightMicroService != null) {
+
+            String newName = leftMicroService.getName() + " - " + rightMicroService.getName();
+            MicroService microService = new MicroService(newName);
+
+            if (leftMicroService.getChildren() == null && rightMicroService.getChildren() == null) {
+                microService.setParent(newName);
+                List<String> newChildrens = new ArrayList<>();
+                newChildrens.add(leftMicroService.getName());
+                newChildrens.add(rightMicroService.getName());
+                microService.setChildren(newChildrens);
+
+            } else {
+
+                List<String> newChildes = new ArrayList<>();
+                if (leftMicroService.getChildren() != null) {
+                    newChildes.addAll(leftMicroService.getChildren());
+                } else if (rightMicroService.getChildren() != null) {
+                    newChildes.addAll(rightMicroService.getChildren());
+                }
+
+                microService.setChildren(newChildes);
+            }
+
+            return microService;
+        }
+
+        return null;
+    }
+
+    private Double getNewFvalue(MicroService microService) {
+        FitnessFunctionManager fitnessFunctionManager = new FitnessFunctionManager();
+        return  fitnessFunctionManager.calculateNewFitnessFunctionValue(microService);
     }
 
     private ClusterPair findByClusters(Cluster c1, Cluster c2) {
@@ -103,22 +149,21 @@ public class HierarchyBuilder {
     }
 
     public TreeMap getAllClusters() {
-        return dansMethod(this::methodToPass);
+        return filterClusters(this::getClustersTree);
     }
 
-    private TreeMap<String, Object> methodToPass() {
-        return new TreeMap<>(clMap);
+    private TreeMap<String, Object> getClustersTree() {
+        return new TreeMap<>(clustersMap);
     }
 
-    private static TreeMap dansMethod(Callable<TreeMap<String, Object>> myFunc) {
+    private static TreeMap filterClusters(Callable<TreeMap<String, Object>> clusterEvaluation) {
 
         try {
-            return myFunc.call();
+            return clusterEvaluation.call();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
     }
-
 }

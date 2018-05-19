@@ -12,7 +12,7 @@ import static com.angular.spring.test.ProjectConstants.*;
 
 public class Resources {
 
-    static HashMap<String, Object> clMap;
+    static HashMap<String, Object> clustersMap;
 
     static void init() {
 
@@ -32,7 +32,7 @@ public class Resources {
             HashMap<String, Object> resultMap = (HashMap<String, Object>) serviceObject;
 
             if (resultMap.get(kcValue) != null) {
-                clMap = (HashMap<String, Object>) resultMap.get(kcValue);
+                clustersMap = (HashMap<String, Object>) resultMap.get(kcValue);
             } else {
 
                 throw new RuntimeException("Invalid Architectural Constrains!");

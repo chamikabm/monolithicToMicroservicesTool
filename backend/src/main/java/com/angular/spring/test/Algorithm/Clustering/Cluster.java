@@ -1,6 +1,6 @@
 package com.angular.spring.test.Algorithm.Clustering;
 
-import com.angular.spring.test.model.MicroService;
+import com.angular.spring.test.manager.models.MicroService;
 import com.angular.spring.test.model.RiskLevel;
 
 import java.util.ArrayList;
@@ -15,6 +15,8 @@ public class Cluster {
     private List<Cluster> children;
 
     private List<String> leafNames;
+
+    private MicroService microService;
 
     private Distance distance = new Distance();
 
@@ -194,45 +196,12 @@ public class Cluster {
 
     }
 
-    public List<MicroService> getMicroServices(String[] serviceFiles) {
-
-        if (serviceFiles == null || serviceFiles.length == 0) {
-            System.out.println("No services found in the list");
-            return null;
-        } else {
-            List<String> list = new ArrayList<String>(Arrays.asList(serviceFiles));
-            list.remove("Impl");
-            list.replaceAll(x -> x.replace(".java", ""));
-            list.remove("DepartmentService");
-            list.remove("LecturerService");
-            list.remove("StudentService");
-            list.add("Student - Lecturer - DepartmentService");
-            list.replaceAll(x -> x.replace("Service", " Service"));
-            serviceFiles = list.toArray(new String[0]);
-
-            List<MicroService> microServices = new ArrayList<>();
-            for (int i = 0; i < serviceFiles.length; i++) {
-                String serviceName = serviceFiles[i];
-                microServices.add(new MicroService(i + 1, serviceName, getRiskLevel(serviceName)));
-            }
-
-            return microServices;
-        }
+    public MicroService getMicroService() {
+        return microService;
     }
 
-    private RiskLevel getRiskLevel(String service) {
-        switch (service)  {
-            case "Payment Service" :
-                return RiskLevel.MEDIUM_RISK;
-            case "Exam Service" :
-                return RiskLevel.MEDIUM_RISK;
-            case "Registration Service" :
-                return RiskLevel.HIGH_RISK;
-            case "Student - Lecturer - Department Service" :
-                return RiskLevel.LOW_RISK;
-            default:
-                return   RiskLevel.getRiskForService();
-        }
+    public void setMicroService(MicroService microService) {
+        this.microService = microService;
     }
 }
 

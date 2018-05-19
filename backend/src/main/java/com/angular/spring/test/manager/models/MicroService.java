@@ -28,11 +28,10 @@ public class MicroService {
     private NodeList<ClassOrInterfaceType> interfaces;
 
     public MicroService(String name) {
-        if (getServiceNamesCount(name) > 1) {
-            this.name = getServiceName(name);
+        if (name.contains("-")) {
+            this.name = name;
         } else {
-            this.name = name.replace("ServiceImpl.java", " Service");
-
+            this.name = name.replace("ServiceImpl", " Service");
             if (!this.getName().equals(this.parent)) {
                 this.parent = name;
             }
@@ -154,6 +153,7 @@ public class MicroService {
             updateChildrenList(name);
         }
 
+
      /*   FitnessFunctionManager fitnessFunctionManager = new FitnessFunctionManager();
 
         this.fValue = fitnessFunctionManager.measureFunctionality(this);
@@ -165,19 +165,14 @@ public class MicroService {
     }
 
     private void updateChildrenNames () {
-        this.leafNames = this.children;
+        if (this.children != null) {
+            this.leafNames = this.children;
+        }
     }
 
     private void updateChildrenList (String name) {
-
-        String[] servicesNames = name.split("Service");
-        if (servicesNames.length > 1) {
-            for (String newService : servicesNames) {
-                if (!containsService(children, name)) {
-                    children.add(newService);
-                }
-            }
-        }
+        //Do nothing.
+        //This has been updated while the clusters are being populating.
     }
 
     private boolean containsService(List<String> list, String name){
@@ -214,35 +209,5 @@ public class MicroService {
 
     public NodeList<ClassOrInterfaceType> getInterfaces() {
         return interfaces;
-    }
-
-
-    @Override
-    public int hashCode()
-    {
-        return name.hashCode() + FValue.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (this == obj)
-        {
-            return true;
-        }
-        if (this.getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final MicroService other = (MicroService) obj;
-        if (this.name == null ? other.name != null : !this.FValue.equals(other.FValue))
-        {
-            return false;
-        }
-        return this.name == null || this.FValue.equals(other.FValue);
     }
 }
