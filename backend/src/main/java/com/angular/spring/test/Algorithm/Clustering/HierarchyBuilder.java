@@ -2,6 +2,10 @@ package com.angular.spring.test.Algorithm.Clustering;
 
 import com.angular.spring.test.manager.FitnessFunctionManager;
 import com.angular.spring.test.manager.models.MicroService;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -101,14 +105,14 @@ public class HierarchyBuilder {
         if (leftMicroService != null && rightMicroService != null) {
 
             String newName = leftMicroService.getName() + " - " + rightMicroService.getName();
-            MicroService microService = new MicroService(newName);
+            MicroService newMicroService = new MicroService(newName);
 
             if (leftMicroService.getChildren() == null && rightMicroService.getChildren() == null) {
-                microService.setParent(newName);
+                newMicroService.setParent(newName);
                 List<String> newChildrens = new ArrayList<>();
                 newChildrens.add(leftMicroService.getName());
                 newChildrens.add(rightMicroService.getName());
-                microService.setChildren(newChildrens);
+                newMicroService.setChildren(newChildrens);
 
             } else {
 
@@ -119,13 +123,62 @@ public class HierarchyBuilder {
                     newChildes.addAll(rightMicroService.getChildren());
                 }
 
-                microService.setChildren(newChildes);
+                newMicroService.setChildren(newChildes);
             }
 
-            return microService;
+            updateInterfacesList(leftMicroService, rightMicroService, newMicroService);
+            updateMembersList(leftMicroService, rightMicroService, newMicroService);
+            updateFieldsList(leftMicroService, rightMicroService, newMicroService);
+
+            return newMicroService;
         }
 
         return null;
+    }
+
+    private void updateInterfacesList(MicroService leftMicroService, MicroService rightMicroService,
+                                      MicroService newMicroService) {
+
+        NodeList<ClassOrInterfaceType> interfaces = new NodeList<>();
+        if (leftMicroService.getInterfaces() != null) {
+            interfaces.addAll(leftMicroService.getInterfaces());
+        }
+
+        if (rightMicroService.getInterfaces() != null) {
+            interfaces.addAll(rightMicroService.getInterfaces());
+        }
+
+        newMicroService.setInterfaces(interfaces);
+    }
+
+    private void updateMembersList(MicroService leftMicroService, MicroService rightMicroService,
+                                  MicroService newMicroService) {
+
+        NodeList<BodyDeclaration<?>> members = new NodeList<>();
+        if (leftMicroService.getMembers() != null) {
+            members.addAll(leftMicroService.getMembers());
+        }
+
+        if (rightMicroService.getInterfaces() != null) {
+            members.addAll(rightMicroService.getMembers());
+        }
+
+        newMicroService.setMembers(members);
+    }
+
+    private void updateFieldsList(MicroService leftMicroService, MicroService rightMicroService,
+                                      MicroService newMicroService) {
+
+        List<FieldDeclaration> fields = new ArrayList<>();
+        if (leftMicroService.getFields() != null) {
+            fields.addAll(leftMicroService.getFields());
+        }
+
+        if (rightMicroService.getInterfaces() != null) {
+            fields.addAll(rightMicroService.getFields());
+        }
+
+        newMicroService.setFields(fields);
     }
 
     private Double getNewFvalue(MicroService microService) {

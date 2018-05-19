@@ -206,10 +206,10 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
         return Math.sqrt((pointOne[0]-pointTwo[0])*2 + (pointOne[1] - pointTwo[1])*2);
     }
 
-    public List<Cluster> getClusters(List<MicroService> initialMicroServicesClusters) {
+    private List<Cluster> getClusters(List<MicroService> initialMicroServicesClusters) {
         List<Cluster> initialClusters = new ArrayList<>();
 
-        for (MicroService microService : initialMicroServicesClusters){
+        for (MicroService microService : initialMicroServicesClusters) {
             Cluster cluster = new Cluster(microService.getName());
             cluster.setDistance(new Distance(microService.getFValue()));
             cluster.setMicroService(microService);
@@ -219,8 +219,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
         return  initialClusters;
     }
 
-    private List<Cluster> createClusters(String[] clusterNames)
-    {
+    private List<Cluster> createClusters(String[] clusterNames) {
         List<Cluster> clusters = new ArrayList<>();
         for (String clusterName : clusterNames)
         {
@@ -230,8 +229,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
         return clusters;
     }
 
-    private List<Cluster> createClusters(String[] clusterNames, double[] weights)
-    {
+    private List<Cluster> createClusters(String[] clusterNames, double[] weights) {
         List<Cluster> clusters = new ArrayList<>();
         for (int i = 0; i < weights.length; i++)
         {
@@ -246,20 +244,19 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
 
         @Override
         public void visit(MethodDeclaration n, Object arg) {
-            // here you can access the attributes of the method.
-            // this method will be called for all methods in this
-            // CompilationUnit, including inner class methods
-//            System.out.println(n.getName());
-//            System.out.println(n.getDeclarationAsString(
-//                    true,
-//                    true,
-//                    true));
-//            System.out.println(n.getBody());
+//             here you can access the attributes of the method.
+//             this method will be called for all methods in this
+//             CompilationUnit, including inner class methods
+            System.out.println(n.getName());
+            System.out.println(n.getDeclarationAsString(
+                    true,
+                    true,
+                    true));
+            System.out.println(n.getBody());
         }
     }
 
     private static class ClassVisitor extends VoidVisitorAdapter {
-
 
         @Override
         public void visit(ClassExpr n, Object arg) {
@@ -272,17 +269,6 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
     private static MicroService getInitialMicroServiceCluster(String name) {
 
         return new MicroService(name);
-    }
-
-    private void findAllServiceClassses(CompilationUnit compilationUnit) {
-        compilationUnit.findAll(ClassOrInterfaceDeclaration.class).stream()
-                .filter(c -> !c.isInterface()
-                        && c.isAbstract()
-                        && !c.getNameAsString().endsWith("Service"))
-                .forEach(c -> {
-                    String className = c.getNameAsString();
-                    System.out.println("Class Name " + className);
-                });
     }
 
     private static void updateInitialServiceCluster(CompilationUnit compilationUnit, File file) {

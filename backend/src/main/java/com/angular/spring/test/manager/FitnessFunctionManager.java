@@ -154,6 +154,7 @@ public class FitnessFunctionManager {
      * @return  - np(E) - number of provided interface
      */
     private int computeNumberOfProvidedInterfaces(MicroService microService) {
+
         int np = 0;
 
         return np;
