@@ -129,6 +129,7 @@ public class HierarchyBuilder {
             updateMembersList(leftMicroService, rightMicroService, newMicroService);
             updateFieldsList(leftMicroService, rightMicroService, newMicroService);
 
+            System.out.println(newMicroService.getName());
             return newMicroService;
         }
 

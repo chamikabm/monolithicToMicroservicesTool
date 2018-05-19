@@ -1,6 +1,7 @@
 package com.angular.spring.test.manager.models;
 
 import com.angular.spring.test.Algorithm.Clustering.Distance;
+import com.angular.spring.test.manager.FitnessFunctionManager;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -30,14 +31,13 @@ public class MicroService {
     public MicroService(String name) {
         if (name.contains("-")) {
             this.name = name;
+            updateValues(this.name);
         } else {
             this.name = name.replace("ServiceImpl", " Service");
             if (!this.getName().equals(this.parent)) {
                 this.parent = name;
             }
         }
-
-        updateValues(this.name);
     }
 
     public String getName() {
@@ -154,14 +154,11 @@ public class MicroService {
         }
 
 
-     /*   FitnessFunctionManager fitnessFunctionManager = new FitnessFunctionManager();
+        FitnessFunctionManager fitnessFunctionManager = new FitnessFunctionManager();
 
-        this.fValue = fitnessFunctionManager.measureFunctionality(this);
-        this.cValue = fitnessFunctionManager.measureComposability(this);
-        this.sValue = fitnessFunctionManager.measureSelfContainment(this);
-        this.uValue = fitnessFunctionManager.measureUsage(this);
+
         this.FValue = fitnessFunctionManager.calculateFitnessFunction(ALPHA, BETA, GAMMA, DELTA, this);
-        this.distance.setDistance(this.FValue);*/
+        this.distance.setDistance(this.FValue);
     }
 
     private void updateChildrenNames () {
@@ -175,7 +172,7 @@ public class MicroService {
         //This has been updated while the clusters are being populating.
     }
 
-    private boolean containsService(List<String> list, String name){
+    private boolean containsService(List<String> list, String name) {
         return list.stream().anyMatch(str -> str.trim().equals(name));
     }
 

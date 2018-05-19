@@ -24,7 +24,7 @@ public class FitnessFunctionManager {
      *           [(alpha * F(E) + beta * C(E) + gamma * S(E) + delta * U(E) ) / (alpha + beta + gamma + delta)]
      */
     public Double calculateFitnessFunction(int alpha, int beta, int gamma, int delta, MicroService microService) {
-        Double fitnessValue = 0.0;
+        Double fitnessValue;
         int n = alpha + beta + gamma + delta;
 
         fitnessValue = (alpha*measureFunctionality(microService)+
@@ -82,7 +82,7 @@ public class FitnessFunctionManager {
     private Double measureComposability(MicroService microService) {
         Double comparabilityValue;
 
-        int I = microService.getChildren().size();
+        int I = microService.getChildren() == null ? 1 : microService.getChildren().size();
         Double totalInternalCohesion= computeCohesionWithInInterface(microService);
 
         comparabilityValue = totalInternalCohesion/I;
@@ -151,11 +151,10 @@ public class FitnessFunctionManager {
      */
     private Double computeInternalCoupling(MicroService microService) {
         CouplingCalculator couplingCalculator = new CouplingCalculator();
-
         List<String> fileNames = new ArrayList<>();
         fileNames.add(microService.getName());
 
-        if (microService.getChildren().size() > 0) {
+        if (microService.getChildren() != null && microService.getChildren().size() > 0) {
             fileNames.addAll(microService.getChildren());
         }
 
@@ -220,7 +219,7 @@ public class FitnessFunctionManager {
      */
     private int computeNumberOfProvidedInterfaces(MicroService microService) {
 
-        return microService.getInterfaces().size();
+        return microService.getInterfaces() == null ? 0 : microService.getInterfaces().size();
     }
 
     /**

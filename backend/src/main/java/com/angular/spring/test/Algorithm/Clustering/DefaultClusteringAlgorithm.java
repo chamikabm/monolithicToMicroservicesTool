@@ -1,5 +1,7 @@
 package com.angular.spring.test.Algorithm.Clustering;
 
+import static com.angular.spring.test.Algorithm.Clustering.Resources.rawValuesMap;
+
 import com.angular.spring.test.manager.ClusterManager;
 import com.angular.spring.test.manager.models.MicroService;
 import com.github.javaparser.JavaParser;
@@ -13,7 +15,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
 
@@ -76,7 +77,6 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
         }
 
         double[][] initialDistances = getUpdatedInitialDistances(initialMicroServicesClusters);
-        System.out.println(Arrays.deepToString(initialDistances));
         LinkageStrategy linkageStrategy = new SingleLinkageStrategy();
 
         checkArguments(initialDistances, initialMicroServicesClusters, linkageStrategy);
@@ -286,7 +286,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
 
         MicroService microService = getInitialMicroServiceCluster(classDeclaration.get().getName().asString());
         microService.setClassDeclarationInfo(classDeclaration.get());
-        microService.setFValue(ThreadLocalRandom.current().nextDouble(0.5, 0.97));
+        microService.setFValue(rawValuesMap.get(microService.getName()).get("fValue"));
         microService.setMembers(classDeclaration.get().getMembers());
         microService.setFields(classDeclaration.get().getFields());
         microService.setInterfaces(classDeclaration.get().getImplementedTypes());
