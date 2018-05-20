@@ -19,7 +19,7 @@ public class Resources {
 
     static void init() {
 
-        String safeKcValue1 = "2-3-1-2-4";
+        String safeKcValue1 = "2-4-2-1-3";
         String safeKcValue2 = "2-2-3-4-1";
 
         JSONParser parser = new JSONParser();
