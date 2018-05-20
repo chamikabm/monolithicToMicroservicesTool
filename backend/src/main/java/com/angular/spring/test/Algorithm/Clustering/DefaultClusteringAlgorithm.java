@@ -94,6 +94,9 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
 
         TreeMap treeMap = builder.getAllClusters();
 
+        //Reset the values for new calculation.
+        initialMicroServicesClusters = new ArrayList<>();
+
 /*        assert treeMap != null;
         for (Object cluster : treeMap.keySet()) {
 
